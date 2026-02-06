@@ -1,0 +1,64 @@
+Metadata-Version: 2.4
+Name: threat-log-analyzer
+Version: 0.2.0
+Summary: Analyze SSH/auth logs for suspicious activity (educational & defensive)
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: PyYAML>=6.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Dynamic: license-file
+
+﻿# threat-log-analyzer (tla)
+
+Analyze SSH/auth logs and summarize suspicious activity (defensive / educational).
+
+## Features
+- Auth/SSH parser with suspicious summaries
+- Time filtering with `--since` (e.g., `24h`, `7d`)
+- HTML, CSV, JSON, JSONL outputs
+- YAML rules for custom detections (`rules/default.yaml`)
+
+## Install (dev)
+```bash
+pip install -e .
+```
+
+## Usage
+```bash
+tla examples/auth.log.sample
+tla /var/log/auth.log --top 20
+tla /var/log/auth.log --json > report.json
+
+# Time filter
+tla /var/log/auth.log --since 24h
+
+# HTML report
+tla /var/log/auth.log --html report.html
+
+# CSV / JSONL export
+tla /var/log/auth.log --csv events.csv --jsonl events.jsonl
+
+# Custom rules
+tla /var/log/auth.log --rules rules/default.yaml
+```
+
+## Rules format
+`rules/default.yaml` is a list of rules. If you don’t pass `--rules`, the tool will use `rules/default.yaml` in your working directory when present, otherwise the packaged default rules.
+
+```yaml
+- id: SSH_BRUTE_FORCE
+  description: Many failed password attempts
+  severity: medium
+  regex: "Failed password"
+```
+
+## Notes
+This tool does not perform attacks. It only parses logs and creates summaries.
+
+Accuracy depends on log format (tested mainly with Debian/Ubuntu auth.log style).
+
+## Next steps
+- Add more log format parsers
+- Enrich IPs with geo/ASN data (defensive enrichment)

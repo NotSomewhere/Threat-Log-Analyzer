@@ -1,0 +1,12 @@
+﻿- id: SSH_BRUTE_FORCE
+  description: Many failed password attempts
+  severity: medium
+  regex: "Failed password"
+- id: SSH_INVALID_USERS
+  description: Invalid user attempts
+  severity: low
+  regex: "Invalid user"
+- id: SSH_ACCEPTED_PASSWORD
+  description: Successful password login (review if unexpected)
+  severity: low
+  regex: "Accepted password"
